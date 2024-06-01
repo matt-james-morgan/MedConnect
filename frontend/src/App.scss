@@ -11,9 +11,8 @@ $eventColor: #004085;
 
 /* Customize the FullCalendar header */
 .fc .fc-toolbar {
-  background-color: #f8f9fa;
+  background-color: $backgroundWhite;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
 }
 
 /* Customize the calendar title */

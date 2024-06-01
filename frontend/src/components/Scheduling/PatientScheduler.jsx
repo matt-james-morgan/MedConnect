@@ -21,9 +21,6 @@ import { Typography } from '@mui/material';
 
 export default function PatientScheduler() {
 
-
-
-
   const { userState } = useContext(UserSignedIn);
 
   const [events, setEvents] = useState([])

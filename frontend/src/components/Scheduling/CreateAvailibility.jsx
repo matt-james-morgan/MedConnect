@@ -9,18 +9,18 @@ import {
     Grid,
     TextField,
     MenuItem
-  } from '@mui/material';
-
-  import { styled } from '@mui/system';
-  import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-  import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-  import { DatePicker, TimePicker, DateTimePicker } from '@mui/x-date-pickers';
-  import dayjs from "dayjs";
-  import { UserSignedIn } from "../../App";
-  import FullCalendar from '@fullcalendar/react'
-  import dayGridPlugin from '@fullcalendar/daygrid';
-  import timeGridPlugin from '@fullcalendar/timegrid';
-  import interactionPlugin from '@fullcalendar/interaction';
+} from '@mui/material';
+import { useGet } from "../../hooks/useAPI";
+import { styled } from '@mui/system';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker, TimePicker, DateTimePicker } from '@mui/x-date-pickers';
+import dayjs from "dayjs";
+import { UserSignedIn } from "../../App";
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
 const isSameOrAfter = require('dayjs/plugin/isSameOrAfter')
@@ -42,12 +42,30 @@ const StyledTypography = styled(Typography)({
 
 const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appointment}) => {
   
-  const timePickerMinTime = dayjs().set('hour', 9).set('minute', 0).set('second', 0).set('millisecond', 0);
-  const timePickerMaxTime = dayjs().set('hour', 17);
+  
 
   const { userState } = useContext(UserSignedIn);
-
-
+  const {getData, get} = useGet();
+  const [events, setEvents] = useState([
+    {
+      title: 'Team Meeting',
+      start: '2024-06-03T09:00:00',
+      end: '2024-06-03T10:00:00',
+      description: 'Discuss project updates and next steps.'
+    },
+    {
+      title: 'Client Presentation',
+      start: '2024-06-04T13:00:00',
+      end: '2024-06-04T14:30:00',
+      description: 'Present project deliverables to the client.'
+    },
+    {
+      title: 'Development Sprint',
+      start: '2024-06-05',
+      end: '2024-06-07',
+      description: 'Three-day sprint to complete development tasks.'
+    }
+  ]);
   const [errors, setErrors ] = useState([])
   const [availibility, setAvailibility] = useState({
     doctor_id: {
@@ -139,6 +157,21 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
 
   },[]);
 
+  useEffect(()=>{
+    if(availibility.doctor_id.value){
+      get(
+        'appointments/doctors',
+        availibility.doctor_id.value
+      )
+  
+    }
+   
+    
+  },[availibility.doctor_id.value]);
+
+  useEffect(() => {
+    getData && setEvents(getData);
+  }, [getData])
  
 
   
@@ -163,8 +196,7 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
     }
 
     
-   console.log(availibility);
-   debugger;
+  
     
 
     setErrors(newErrors);
@@ -259,6 +291,10 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
       initialView="timeGridWeek"
       dataSet={handleDateTimeChange}
       allDaySlot={false}
+      slotMinTime={"9:00"}
+      slotMaxTime={"18:00"}
+      events={events}
+      eventOverlap={false}
     />
   </Grid>
 )}

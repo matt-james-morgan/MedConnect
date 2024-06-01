@@ -54,6 +54,19 @@ router.get("/patients/:id", (req, res) => {
     });
 });
 
+router.get("/doctors/:id", (req, res) => {
+  const doctorId = req.params.id;
+  getAllAppointmentsByDoctor(doctorId)
+    .then(appointmentData => {
+      const convertedData = mapAndConvertAppointment(appointmentData, "to_string");
+      res.json(convertedData);
+      // res.json(appointmentData);
+    }).catch(error => {
+      console.error("Error fetching patient's appointments: ", error);
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
 
 router.get('/:id', (req, res) => {
 

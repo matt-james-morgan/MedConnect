@@ -5,9 +5,8 @@ Material UI scroll bar styling
 /* App.css */
 /* Customize the FullCalendar header */
 .fc .fc-toolbar {
-  background-color: #f8f9fa;
+  background-color: white;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
 }
 
 /* Customize the calendar title */
