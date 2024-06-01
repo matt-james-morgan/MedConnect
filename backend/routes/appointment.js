@@ -59,6 +59,7 @@ router.get("/doctors/:id", (req, res) => {
   getAllAppointmentsByDoctor(doctorId)
     .then(appointmentData => {
       const convertedData = mapAndConvertAppointment(appointmentData, "to_string");
+      console.log("get appointments by doc id", convertedData);
       res.json(convertedData);
       // res.json(appointmentData);
     }).catch(error => {

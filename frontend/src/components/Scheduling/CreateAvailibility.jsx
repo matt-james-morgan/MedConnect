@@ -158,6 +158,8 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
   },[]);
 
   useEffect(()=>{
+
+    console.log(availibility.doctor_id.value);
     if(availibility.doctor_id.value){
       get(
         'appointments/doctors',
@@ -230,7 +232,7 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
   const handleDoctorChange = (e) => {
     const selectedDoctor = userState.doctors.find((doc) => doc.name === e.target.value);
     const doctor_id = selectedDoctor ? selectedDoctor.id : null;
-    setAvailibility(prev =>({ ...prev, doctor_name:{...prev.doctor_name, value: e.target.value}, doctor_id: doctor_id }));
+    setAvailibility(prev =>({ ...prev, doctor_name:{...prev.doctor_name, value: e.target.value}, doctor_id: {...prev.doctor_id, value: doctor_id} }));
   };
 
   
