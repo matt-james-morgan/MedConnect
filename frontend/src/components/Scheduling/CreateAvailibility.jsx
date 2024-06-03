@@ -246,7 +246,8 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
   }
 
   const handleClear = () =>{
-   
+    setAvailibility(prev =>({ ...prev, start_time: {...prev.start_time, value: ""}, end_time: {...prev.end_time, value: ""}, doctor_name:{...prev.doctor_name, value: ""}, doctor_id: {...prev.doctor_id, value: ""} }));
+
   }
   
 
