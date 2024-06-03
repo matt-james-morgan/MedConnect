@@ -17,6 +17,7 @@ const { deleteAppointment } = require("../src/db/queries/appointments/deleteAppo
 const { getClinicsOpenAppointments } = require('../src/db/queries/appointments/getClinicsOpenAppointments');
 const { mapAndConvertAppointment } = require('../helpers/dateConverters');
 const { getAllAppointmentsByDoctorId } = require("../src/db/queries/appointments/getAllApointmentsByDoctorId")
+const { addAvailbility } = require("../src/db/queries/appointments/addAvailbility")
 const dayjs = require("dayjs");
 
 
@@ -139,14 +140,18 @@ router.get("/open/:id", (req, res) => {
 
 //Create availabilty for specfic doctor
 router.put("/availability/:id", (req, res) => {
-  console.log(req.body);
-  // let datePlaceholder = dayjs();
+  
+  let datePlaceholder = dayjs(req.body.start_time);
+  console.log("formatted", datePlaceholder.format());
+
+  addAvailbility(req.body);
       
-      
-  // while(dayjs(datePlaceholder).isBefore(availibility.end_time.value)){
-  //   datePlaceholder = dayjs(datePlaceholder).add(30, "minutes");
-  //   console.log("Hey");
-  // }
+  while(dayjs(datePlaceholder).isBefore(req.body.end_time.value)){
+
+
+    datePlaceholder = dayjs(datePlaceholder).add(30, "minutes");
+    
+  }
 
   // addAvailabilty(req.body)
   //   .then(result => {
