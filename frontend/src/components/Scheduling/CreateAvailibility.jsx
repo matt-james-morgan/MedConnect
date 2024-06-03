@@ -1,3 +1,10 @@
+//////////////////////////////////////////////////////////////////
+/*
+TO DO
+1)Divide user picked time into appointments
+2)error handle if user chooses start time after end time and vice versa
+
+*/
 import { useEffect, useState, useContext} from "react";
 
 import {
@@ -46,26 +53,7 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
 
   const { userState } = useContext(UserSignedIn);
   const {getData, get} = useGet();
-  const [events, setEvents] = useState([
-    {
-      title: 'Team Meeting',
-      start: '2024-06-03T09:00:00',
-      end: '2024-06-03T10:00:00',
-      description: 'Discuss project updates and next steps.'
-    },
-    {
-      title: 'Client Presentation',
-      start: '2024-06-04T13:00:00',
-      end: '2024-06-04T14:30:00',
-      description: 'Present project deliverables to the client.'
-    },
-    {
-      title: 'Development Sprint',
-      start: '2024-06-05',
-      end: '2024-06-07',
-      description: 'Three-day sprint to complete development tasks.'
-    }
-  ]);
+  const [events, setEvents] = useState([]);
   const [errors, setErrors ] = useState([])
   const [availibility, setAvailibility] = useState({
     doctor_id: {
@@ -159,7 +147,7 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
 
   useEffect(()=>{
 
-    console.log(availibility.doctor_id.value);
+   
     if(availibility.doctor_id.value){
       get(
         'appointments/doctors',
@@ -172,9 +160,25 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
   },[availibility.doctor_id.value]);
 
   useEffect(() => {
-    getData && setEvents(getData);
-  }, [getData])
- 
+    if (getData) {
+      const formattedData = getData.map((appointment) => {
+        
+       if(appointment.status){
+        return {
+          start: appointment.start_time,
+          end: appointment.end_time,
+          title: appointment.patient_name,
+        };
+       } 
+       return {
+          start: appointment.start_time,
+          end: appointment.end_time,
+          title: "Available",
+       }
+      });
+      setEvents(formattedData);
+    }
+  }, [getData]);
 
   
   const handleDelete = async () => {
@@ -197,7 +201,7 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
       }
     }
 
-    
+    debugger;
   
     
 
@@ -237,12 +241,9 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
 
   
 
-  const handleDateTimeChange = (field, newValue) => {
-    setAvailibility(prevState => ({
-        ...prevState,
-        [field]: dayjs(newValue)
-    }));
-  };
+  const handleAvailibilty = (info) => {
+    setAvailibility(prev =>({ ...prev, start_time: {...prev.start_time, value: info.startStr}, end_time: {...prev.end_time, value: info.endStr} }));
+  }
 
   const handleClear = () =>{
    
@@ -289,14 +290,16 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
       }}
       selectable
       selectMirror
+      editable={true}
       unselectAuto={false}
       initialView="timeGridWeek"
-      dataSet={handleDateTimeChange}
       allDaySlot={false}
       slotMinTime={"9:00"}
       slotMaxTime={"18:00"}
       events={events}
+      slotDuration="00:30:00"
       eventOverlap={false}
+      select={handleAvailibilty}
     />
   </Grid>
 )}

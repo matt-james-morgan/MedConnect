@@ -16,6 +16,7 @@ const { getAppointmentById } = require("../src/db/queries/appointments/getAppoin
 const { deleteAppointment } = require("../src/db/queries/appointments/deleteAppointment");
 const { getClinicsOpenAppointments } = require('../src/db/queries/appointments/getClinicsOpenAppointments');
 const { mapAndConvertAppointment } = require('../helpers/dateConverters');
+const { getAllAppointmentsByDoctorId } = require("../src/db/queries/appointments/getAllApointmentsByDoctorId")
 
 router.get('/single/:id', (req, res) => {
 
@@ -56,14 +57,13 @@ router.get("/patients/:id", (req, res) => {
 
 router.get("/doctors/:id", (req, res) => {
   const doctorId = req.params.id;
-  getAllAppointmentsByDoctor(doctorId)
+  getAllAppointmentsByDoctorId(doctorId)
     .then(appointmentData => {
       const convertedData = mapAndConvertAppointment(appointmentData, "to_string");
-      console.log("get appointments by doc id", convertedData);
       res.json(convertedData);
       // res.json(appointmentData);
     }).catch(error => {
-      console.error("Error fetching patient's appointments: ", error);
+      console.error("Error fetching doctors's appointments: ", error);
       res.status(500).json({ error: 'Internal server error' });
     });
 });

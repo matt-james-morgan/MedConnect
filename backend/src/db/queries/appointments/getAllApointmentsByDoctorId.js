@@ -4,7 +4,7 @@ const getAllAppointmentsByDoctorId = (doctorId) => {
     const value = [doctorId]
    
     const query = `
-    SELECT appointments
+    SELECT *
     FROM appointments
     WHERE doctor_id = $1;
   `;
