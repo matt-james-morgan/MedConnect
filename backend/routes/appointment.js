@@ -17,6 +17,8 @@ const { deleteAppointment } = require("../src/db/queries/appointments/deleteAppo
 const { getClinicsOpenAppointments } = require('../src/db/queries/appointments/getClinicsOpenAppointments');
 const { mapAndConvertAppointment } = require('../helpers/dateConverters');
 const { getAllAppointmentsByDoctorId } = require("../src/db/queries/appointments/getAllApointmentsByDoctorId")
+const dayjs = require("dayjs");
+
 
 router.get('/single/:id', (req, res) => {
 
@@ -135,10 +137,30 @@ router.get("/open/:id", (req, res) => {
   if cancelled
 */
 
+//Create availabilty for specfic doctor
+router.put("/availability/:id", (req, res) => {
+  console.log(req.body);
+  // let datePlaceholder = dayjs();
+      
+      
+  // while(dayjs(datePlaceholder).isBefore(availibility.end_time.value)){
+  //   datePlaceholder = dayjs(datePlaceholder).add(30, "minutes");
+  //   console.log("Hey");
+  // }
+
+  // addAvailabilty(req.body)
+  //   .then(result => {
+  //     return result;
+  //   })
+  //   .catch(error => {
+  //     res
+  //       .status(500)
+  //       .json({ error: error.message });
+  //   });
+});
 
 router.put("/:id", (req, res) => {
-  // const convertedData = mapAndConvertAppointment([req.body], "to_date");
-  // console.log("convertedData", convertedData);
+ 
   editAppointment(req.body)
     .then(result => {
       return result;

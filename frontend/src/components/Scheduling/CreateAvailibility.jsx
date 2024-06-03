@@ -17,7 +17,7 @@ import {
     TextField,
     MenuItem
 } from '@mui/material';
-import { useGet } from "../../hooks/useAPI";
+import { useGet, usePut } from "../../hooks/useAPI";
 import { styled } from '@mui/system';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -53,6 +53,7 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
 
   const { userState } = useContext(UserSignedIn);
   const {getData, get} = useGet();
+  const {getPut, put} = usePut();
   const [events, setEvents] = useState([]);
   const [errors, setErrors ] = useState([])
   const [availibility, setAvailibility] = useState({
@@ -188,6 +189,7 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
   const handleSave = async () => {
 
     let newErrors = {};
+    const availibilityDates = [];
 
     for (const [key, value] of Object.entries(availibility)) {
       
@@ -201,7 +203,6 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
       }
     }
 
-    debugger;
   
     
 
@@ -209,8 +210,23 @@ const CreateAvailibility = ({availabilityDisplay, setAvailabilityDisplay, appoin
     
     //Send data if there are no errors
     if (Object.keys(newErrors).length === 0) {
-      const dayjsStartDate = dayjs(availibility.start_time.value)
+      const payload = {
+        ...availibility,
+        id: availibility.doctor_id.value,
+        doctor_id: availibility.doctor_id.value,
+        doctor_name: availibility.doctor_name.value,
+        start_time: availibility.start_time.value,
+        end_time: availibility.end_time.value,
+      };
+        put(
+          'appointments/availability',
+          payload
+        )
+    
+      
+      
     }
+
     const data = {
       start_time: availibility.start_time.value,
       end_time: availibility.end_time.value,
