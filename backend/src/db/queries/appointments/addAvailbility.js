@@ -2,7 +2,7 @@ const db = require('../../connection');
 
 const addAvailbility = (availability) => {
 
-    console.log(availability);
+    console.log("database query", availability);
     const value = [null, availability.doctor_id, null, availability.doctor_name, availability.start_time, availability.end_time, availability.clinic_id, false, availability.clinic_name]
 
    

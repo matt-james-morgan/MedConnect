@@ -141,27 +141,29 @@ router.get("/open/:id", (req, res) => {
 //Create availabilty for specfic doctor
 router.put("/availability/:id", (req, res) => {
   
-  let datePlaceholder = dayjs(req.body.start_time);
-  console.log("formatted", datePlaceholder.format());
+  let startTimePlaceholder = dayjs(req.body.start_time);
+  let endTimePlaceholder = dayjs(req.body.start_time);
+  const availability = req.body;
 
-  addAvailbility(req.body);
+  
+
+  
       
-  while(dayjs(datePlaceholder).isBefore(req.body.end_time.value)){
+  while(dayjs(startTimePlaceholder).isBefore(req.body.end_time.value)){
+    endTimePlaceholder = dayjs(endTimePlaceholder).add(30, "minutes");
+    addAvailbility({...availability, start_time: startTimePlaceholder.format(), end_time: endTimePlaceholder.format()}) .then(result => {
+      return result;
+    })
+    .catch(error => {
+      res
+        .status(500)
+        .json({ error: error.message })
+      });
 
-
-    datePlaceholder = dayjs(datePlaceholder).add(30, "minutes");
-    
+    startTimePlaceholder = dayjs(startTimePlaceholder).add(30, "minutes");
   }
 
-  // addAvailabilty(req.body)
-  //   .then(result => {
-  //     return result;
-  //   })
-  //   .catch(error => {
-  //     res
-  //       .status(500)
-  //       .json({ error: error.message });
-  //   });
+
 });
 
 router.put("/:id", (req, res) => {
